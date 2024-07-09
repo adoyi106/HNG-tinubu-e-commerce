@@ -23,7 +23,7 @@ function Cta() {
           <div
             role="img"
             aria-label="A picture of fruit basket"
-            className="cta-img bg-cta"
+            className="cta-img bg-cta bg-cover bg-center"
           ></div>
         </div>
       </div>
