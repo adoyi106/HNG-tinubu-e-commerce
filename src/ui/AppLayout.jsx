@@ -7,7 +7,7 @@ function AppLayout() {
     <div className="bg-[#fff] font-Jakarta">
       <Header />
       <main>
-        <div className="max-w-[120rem] m-[auto 0] p-[0 3.3rem]">
+        <div className="">
           <Outlet />
         </div>
       </main>
