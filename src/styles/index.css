@@ -48,6 +48,6 @@ body {
     @apply grid bg-[#F7E6D9] pt-[2.8rem] pb-[6.4rem] px-[1.6rem] lg:pt-[4.8rem] lg:pb-[6.4rem] lg:px-[6.4rem];
   }
   .footer {
-    @apply py-[12rem] px-0 lg:p-[12rem] bg-[#3D3D3D];
+    @apply py-[12rem] px-0 lg:px-[8rem] lg:py-[3rem] bg-[#3D3D3D];
   }
 }

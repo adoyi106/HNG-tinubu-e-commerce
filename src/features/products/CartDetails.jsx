@@ -67,11 +67,12 @@ function Cart() {
               //   <div key={item.id} className="flex items-center border-b py-4">
               <div
                 key={item.id}
+                // grid-rows-[2fr_1fr_1fr_1fr] lg:grid-rows-none
                 // className="grid grid-cols-4 items-center justify-center border-b py-4"
-                className="grid grid-cols-[2fr_1fr_1fr_1fr] items-center justify-center border-b py-4"
+                className="grid  gap-y-8 md:gap-y-0   lg:grid-cols-[2fr_1fr_1fr_1fr]  items-center justify-center border-b py-4"
               >
                 {/* <div className="flex flex-row gap-3 items-center justify-center"> */}
-                <div className="grid grid-cols-[1fr_2fr] gap-3 items-center justify-center">
+                <div className="grid grid-cols-[1fr_2fr]  gap-3  items-center justify-center">
                   <img
                     src={item.picture}
                     alt={item.name}
@@ -91,7 +92,7 @@ function Cart() {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center justify-center space-x-4">
+                <div className="flex items-center col-start-2 justify-center space-x-4">
                   {/* <button
                     onClick={() => handleQuantityChange(item.id, -1)}
                     className="cursor-pointer text-[#CC5500] bg-[#F7E6D9] rounded-full flex items-center justify-center px-6 py-3 md:px-5 md:py-2.5 text-2xl md:text-xl"
@@ -132,7 +133,7 @@ function Cart() {
                 <div>
                   <button
                     onClick={() => handleRemove(item.id)}
-                    className="text-red-600 ml-4 text-3xl flex flex-row gap-3"
+                    className="text-red-600 ml-4 text-2xl lg:text-3xl flex flex-row gap-3"
                   >
                     <HiOutlineTrash size={24} /> Remove
                   </button>
