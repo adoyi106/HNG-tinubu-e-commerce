@@ -15,7 +15,7 @@ function MobileNav({ toggle, isOpen }) {
       ) : (
         <HiOutlineX
           name="close-outline"
-          className="icon-mobile-nav text-6xl "
+          className="icon-mobile-nav text-6xl z-50"
         />
       )}
     </button>

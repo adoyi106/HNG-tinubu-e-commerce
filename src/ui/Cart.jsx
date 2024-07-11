@@ -1,11 +1,17 @@
 import { HiOutlineShoppingCart } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
-function Cart() {
+//eslint-disable-next-line
+function Cart({ toggle }) {
   return (
-    <div className="flex items-center gap-4">
+    <Link
+      to="/cart"
+      onClick={() => toggle()}
+      className="flex items-center gap-4"
+    >
       <HiOutlineShoppingCart className="text-4xl text-[#5E5E5E] font-normal" />
-      <span className="text-2xl text-[#5E5E5E] hidden lg:block">Cart</span>
-    </div>
+      <span className="text-3xl lg:text-2xl text-[#5E5E5E] block">Cart</span>
+    </Link>
   );
 }
 

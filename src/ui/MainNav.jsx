@@ -1,15 +1,20 @@
 import { Link } from "react-router-dom";
 
-function MainNav() {
+//eslint-disable-next-line
+function MainNav({ toggle }) {
   return (
-    <ul className="list-none flex lg:flex-row gap-32">
+    <ul className="list-none flex flex-col gap-14 lg:flex-row lg:gap-32">
       <li>
-        <Link className="main-nav-links" to="/">
+        <Link className="main-nav-links" to="/" onClick={() => toggle()}>
           Home
         </Link>
       </li>
       <li>
-        <Link className="main-nav-links" to="/products">
+        <Link
+          className="main-nav-links"
+          to="/products"
+          onClick={() => toggle()}
+        >
           Products
         </Link>
       </li>
