@@ -14,7 +14,7 @@ function Header() {
     <header className="bg-white shadow-md">
       <div className="container flex flex-row items-center justify-between px-[4.8rem] h-[9.2rem] border-b border-[#E2E2E2] overflow-hidden">
         <Logo />
-        <nav className="hidden lg:flex lg:flex-row items-center justify-evenly gap-[15rem] ">
+        <nav className="hidden lg:flex lg:flex-row items-center justify-evenly gap-[8rem] ">
           <MainNav />
           <Search />
           <Cart />

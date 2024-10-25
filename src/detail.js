@@ -20,6 +20,7 @@ const item = [
       [
         "Naturally sweet:",
         "Packed with refreshing sweetness for a satisfying snack.",
+        "Naturally sweet. A source of vitamins and fibre for a healthy on-the-go option",
       ],
     ],
   },

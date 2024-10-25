@@ -1,4 +1,4 @@
-import FeaturedFruits from "../features/home/FeaturedFruits";
+import FeaturedFruits from "../features/fruits/FeaturedFruits";
 
 function Products() {
   return (

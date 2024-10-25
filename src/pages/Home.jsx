@@ -1,7 +1,7 @@
-import Hero from "../features/home/Hero";
-import Categories from "../features/home/Categories";
-import FeaturedFruits from "../features/home/FeaturedFruits";
-import Cta from "../features/home/Cta";
+import Hero from "../features/fruits/Hero";
+import Categories from "../features/fruits/Categories";
+import FeaturedFruits from "../features/fruits/FeaturedFruits";
+import Cta from "../ui/Cta";
 
 function Home() {
   return (

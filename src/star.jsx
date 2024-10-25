@@ -30,7 +30,13 @@ export default function StarRating({
 }) {
   const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0);
+  // function handleRating(rating) {
+  //   setRating(rating);
+  //   onSetRating(rating);
+  // }
+  const isDisabled = defaultRating > 1;
   function handleRating(rating) {
+    if (isDisabled) return;
     setRating(rating);
     onSetRating(rating);
   }
@@ -53,6 +59,7 @@ export default function StarRating({
               full={tempRating ? tempRating >= i + 1 : rating >= i + 1}
               color={color}
               size={size}
+              isDisabled={isDisabled}
             />
           );
         })}
@@ -66,21 +73,37 @@ export default function StarRating({
   );
 }
 //eslint-disable-next-line
-function Star({ onRate, full, onHoverIn, onHoverOut, color, size }) {
+function Star({
+  //eslint-disable-next-line
+  onRate,
+  //eslint-disable-next-line
+  full,
+  //eslint-disable-next-line
+  onHoverIn,
+  //eslint-disable-next-line
+  onHoverOut,
+  //eslint-disable-next-line
+  color,
+  //eslint-disable-next-line
+  size,
+  //eslint-disable-next-line
+  isDisabled,
+}) {
   const starStyle = {
     width: `${size}px`,
     height: `${size}px`,
-    cursor: "pointer",
+    cursor: isDisabled ? "default" : "pointer",
     display: "block",
   };
 
   return (
     <span
       style={starStyle}
-      role="button"
-      onClick={onRate}
-      onMouseEnter={onHoverIn}
-      onMouseOut={onHoverOut}
+      // role="button"
+      role={isDisabled ? "presentation" : "button"}
+      onClick={isDisabled ? undefined : onRate}
+      onMouseEnter={isDisabled ? undefined : onHoverIn}
+      onMouseOut={isDisabled ? undefined : onHoverOut}
     >
       {full ? (
         <svg

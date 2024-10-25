@@ -4,10 +4,10 @@ function Logo() {
   return (
     <Link to="/">
       <img
-        className="h-[2.4rem]"
+        className="h-[13.4rem]"
         // height="60"
         // width="60"
-        src="/logo.png"
+        src="/logo-light.png"
         alt="brand logo"
       />
     </Link>

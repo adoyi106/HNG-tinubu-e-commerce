@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function Cta() {
   return (
     <section className="section-cta pt-[9.6rem] pb-[12rem]">
-      <div className="container">
+      <div className="container lg:max-w-[110rem]">
         <div className="cta grid-rows-2 lg:grid-cols-2fr-1fr lg:grid-rows-none">
           <div className="cta-box">
             <h2 className="text-5xl lg:text-7xl font-semibold text-[#1E1E1E] tracking-[-0.5px] mb-[4.8rem] mlg:b-[9.6rem]">

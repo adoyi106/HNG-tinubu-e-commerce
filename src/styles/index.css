@@ -14,6 +14,7 @@ html {
 body {
   overflow-x: hidden;
 }
+
 @layer components {
   .main-nav-links:link,
   .main-nav-links:visited {
@@ -30,8 +31,16 @@ body {
   .link-button:visited {
     @apply border-none inline-block uppercase font-medium text-3xl no-underline text-[#FFFFFF] text-center py-[1.6rem] px-[3.2rem] rounded-md bg-[#d9480f]  w-full lg:w-1/2 cursor-pointer transition-all;
   }
+  .signup:link,
+  .signup:visited {
+    @apply border-none inline-block font-medium text-3xl no-underline text-[#FFFFFF] text-center py-[1.2rem] px-[2.4rem] rounded-md bg-[#d9480f]  w-full cursor-pointer transition-all;
+  }
   .link-button:hover,
   .link-button:active {
+    @apply bg-[#e8590c];
+  }
+  .signup:hover,
+  .signup:active {
     @apply bg-[#e8590c];
   }
   .container {
@@ -49,5 +58,14 @@ body {
   }
   .footer {
     @apply py-[12rem] px-0 lg:px-[8rem] lg:py-[3rem] bg-[#3D3D3D];
+  }
+  .spinner {
+    margin: 3.2rem auto 1.6rem;
+    width: 60px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 8px solid #1b2631;
+    border-right-color: #b7c7d7;
+    animation: rotate 1s infinite linear;
   }
 }

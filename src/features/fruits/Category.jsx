@@ -1,5 +1,6 @@
 import fruits from "../../categories";
 import CategoryItem from "./CategoryItem";
+// import { useProducts } from "../products/useProducts";
 
 function Category() {
   return (
