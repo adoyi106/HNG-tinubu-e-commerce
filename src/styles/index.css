@@ -68,4 +68,11 @@ body {
     border-right-color: #b7c7d7;
     animation: rotate 1s infinite linear;
   }
+  .line::after {
+    content: "";
+    display: inline-block;
+    border: 0.1rem solid #7d7d7d;
+    flex-grow: 1;
+    -webkit-box-flex: 1;
+  }
 }

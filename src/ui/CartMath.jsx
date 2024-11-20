@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 
 //eslint-disable-next-line
-function CartMath({ stock, onAddToCart }) {
+function CartMath({ stock, onAddToCart, inCart }) {
   const [cartValue, setCartValue] = useState(1);
   const navigate = useNavigate();
   // const currentValue = 1;
@@ -35,7 +35,7 @@ function CartMath({ stock, onAddToCart }) {
           +
         </span>
       </div>
-      {onAddToCart ? (
+      {inCart ? (
         <button
           onClick={() => navigate("/cart")}
           // onClick={() => onAddToCart(cartValue)}

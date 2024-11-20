@@ -5,10 +5,14 @@ import { HiOutlineHeart } from "react-icons/hi";
 import { capitalizeFirstLetter, formatCurrency } from "../../utils/helpers";
 import CartMath from "../../ui/CartMath";
 import { useUpdateCart } from "../cart/useUpdateCart";
+import { useCart } from "../cart/useCart";
+import { useEffect, useState } from "react";
 
 //eslint-disable-next-line
 function FeaturedItem({ item }) {
   const { updateCart } = useUpdateCart();
+  const { cart } = useCart();
+  const [inCart, setInCart] = useState(false);
 
   //eslint-disable-next-line
   const {
@@ -37,6 +41,15 @@ function FeaturedItem({ item }) {
   //eslint-disable-next-line
   const describe = description.split(/[.,;!?]/).map((de) => de.trim())[0];
 
+  //To check if an item is in the cart already
+  //eslint-disable-next-line
+  useEffect(() => {
+    const isInCart = cart?.some(
+      (cartItem) => cartItem.id === productId || cartItem.fruitId === productId
+    );
+    setInCart(isInCart);
+  }, [cart, productId]);
+
   function handleAddToCart(quantity) {
     const cartItem = {
       fruitId: productId,
@@ -44,6 +57,7 @@ function FeaturedItem({ item }) {
       dateAdded: new Date().toISOString(),
     };
     updateCart({ obj: cartItem });
+    setInCart(true);
   }
   //eslint-disable-next-line
   // const currentPrice = current_price[0]?.NGN?.[0];
@@ -70,7 +84,7 @@ function FeaturedItem({ item }) {
       className={`flex flex-col gap-3 px-4 border border-[#DEDEDE] rounded-lg relative `}
     >
       <HiOutlineHeart className="absolute text-2xl top-5 right-4 text-[#1E1E1E]" />
-      {/* <div> */}
+
       <img
         className={`mb-6 mt-4 h-full `}
         src={image}
@@ -125,7 +139,11 @@ function FeaturedItem({ item }) {
           </div>
         </div> */}
       </div>
-      <CartMath stock={stockQuantity} onAddToCart={handleAddToCart} />
+      <CartMath
+        stock={stockQuantity}
+        onAddToCart={handleAddToCart}
+        inCart={inCart}
+      />
       {/* <div className="pt-3"> */}
       <button
         onClick={() => navigate(`/products/${productId}`)}

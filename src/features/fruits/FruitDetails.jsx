@@ -1,36 +1,46 @@
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../cart/useCart";
+import { useUpdateCart } from "../cart/useUpdateCart";
+import { useProduct } from "./useProduct";
 // import item from "../../detail";
 import StarRating from "../../star";
 import CartMath from "../../ui/CartMath";
-import { useProduct } from "./useProduct";
 import Spinner from "../../ui/Spinner";
 import { capitalizeFirstLetter, formatCurrency } from "../../utils/helpers";
-import { useUpdateCart } from "../cart/useUpdateCart";
 
 function FruitDetails() {
-  const navigate = useNavigate();
   const {
     product,
     // product,
     isLoading,
     error,
   } = useProduct();
+  const { cart } = useCart();
+  const navigate = useNavigate();
   //eslint-disable-next-line
   const { updateCart } = useUpdateCart();
-  // console.log(product);
+  const [inCart, setInCart] = useState(false);
 
-  if (isLoading) return <Spinner />;
-  if (error) return <p>error happened</p>;
-  const {
-    //eslint-disable-next-line
-    id: productId,
-    name,
-    image,
-    price,
-    description,
-    star,
-    stockQuantity,
-  } = product;
+  // const {
+  //   //eslint-disable-next-line
+  //   id: productId,
+  //   name,
+  //   image,
+  //   price,
+  //   description,
+  //   star,
+  //   stockQuantity,
+  // } = product;
+  const productId = product?.id;
+  const name = product?.name;
+  const image = product?.image;
+  const price = product?.price;
+  const description = product?.description;
+  const star = product?.star;
+  const stockQuantity = product?.stockQuantity;
+
+  //To
 
   function handleAddToCart(quantity) {
     const cartItem = {
@@ -39,7 +49,20 @@ function FruitDetails() {
       dateAdded: new Date().toISOString(),
     };
     updateCart({ obj: cartItem });
+    setInCart(true);
   }
+
+  // check if an item is in the cart already
+  //eslint-disable-next-line
+  useEffect(() => {
+    const isInCart = cart?.some(
+      (cartItem) => cartItem.id === productId || cartItem.fruitId === productId
+    );
+    setInCart(isInCart);
+  }, [cart, productId]);
+
+  if (isLoading) return <Spinner />;
+  if (error) return <p>error happened</p>;
   return (
     <section className="section-product-details pt-[4.8rem] pb-[3.2rem]">
       <div className="container">
@@ -62,10 +85,10 @@ function FruitDetails() {
             </span>
 
             <span className="block font-medium text-5xl text-[#3D3D3D] mb-6">
-              {capitalizeFirstLetter(name)}
+              {capitalizeFirstLetter(name || "")}
             </span>
             <span className="block font-bold text-4xl text-[#1E1E1E]">{`${formatCurrency(
-              price
+              price || 0
             )}`}</span>
 
             <p className="text-2xl text-[#616161] font-normal my-3">
@@ -81,7 +104,11 @@ function FruitDetails() {
               />
             </div>
             {/* increase/decrease cart */}
-            <CartMath stock={stockQuantity} onAddToCart={handleAddToCart} />
+            <CartMath
+              stock={stockQuantity}
+              onAddToCart={handleAddToCart}
+              inCart={inCart}
+            />
             <button
               onClick={() => navigate(`/cart`)}
               // to="/cartDetails"

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { HiOutlineTrash } from "react-icons/hi";
+import { HiCheck, HiOutlineTrash } from "react-icons/hi";
 
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -9,42 +9,42 @@ import {
   formatWeight,
 } from "../../utils/helpers";
 import { useCart } from "./useCart";
+import { useCart as useCartContext } from "../../context/CartContext";
 // import { useUpdateCart } from "./useUpdateCart";
 import { useDeleteCartItem } from "./useDeleteCartItem";
 import Spinner from "../../ui/Spinner";
-// import { useUpdateCart } from "./useUpdateCart";
-//
-// import { Link } from "react-router-dom";
-
-// function CartDetails() {
-//   return (
-//     <section className="pt-[4.8rem] pb-[3.2rem]">
-//       <div className="container">
-//         <Link
-//           to="/products"
-//           className="text-4xl uppercase text-[#1E1E1E] font-semibold flex flex-row gap-4 items-center"
-//         >
-//           <span className="text-[#CC5500]">&larr;</span>
-//           My Cart
-//         </Link>
-//       </div>
-//     </section>
-//   );
-// }
-
-// export default CartDetails;
 
 function Cart() {
   const navigate = useNavigate();
   const { cart, isLoading } = useCart();
   const { deleteCartItem } = useDeleteCartItem();
+  const { updateSelectedItems } = useCartContext();
   // const { updateCart } = useUpdateCart();
   const [items, setItems] = useState(cart || []);
   const [deliveryMode, setDeliveryMode] = useState("home");
+  const [selectedCity, setSelectedCity] = useState("lagos");
+  //handle subTotal and totalPrice changes
+
+  const [subTotal, setSubTotal] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  //handle checked
+  const [checkedItems, setCheckedItems] = useState({});
+  const deliveryFee = deliveryMode === "home" ? 1000 : 0;
+  // const [isChecked, setIsChecked] = useState(false);
   useEffect(() => {
     setItems(cart || []);
   }, [cart]);
 
+  //calculations for subTotal and total price as items change
+  useEffect(() => {
+    const calculateSubTotal = items
+      .filter((item) => checkedItems[item.id])
+      .reduce((total, item) => (total + item.fruits.price) * item.quantity, 0);
+
+    //total Price and subTotal
+    setSubTotal(calculateSubTotal);
+    setTotalPrice(calculateSubTotal + deliveryFee);
+  }, [items, checkedItems, deliveryFee]);
   if (isLoading) return <Spinner />;
 
   if (cart.length === 0)
@@ -58,12 +58,18 @@ function Cart() {
   const handleRemove = (id) => {
     const updatedItems = cart.filter((item) => item.id !== id);
     // const updatedItems = items.filter((item) => item.id !== id);
-    console.log(updatedItems);
+
+    setItems(updatedItems);
     deleteCartItem(id);
-
-    // setItems(updatedItems);
+    //remove from checked items
+    const newCheckedItems = { ...checkedItems };
+    // deleteCartItem(newCheckedItems[id])
+    setCheckedItems(newCheckedItems);
   };
-
+  //function to set new selected city
+  function handleSelectedCity(event) {
+    setSelectedCity(event.target.value);
+  }
   function handleReduceQuantity(id) {
     const updatedItem = items.map((item) => {
       if (item.id === id) {
@@ -90,42 +96,32 @@ function Cart() {
     });
     setItems(updatedItem);
   }
-  // const selectedItem = items.filter((item) => item.id === id);
-  // console.log(selectedItem);
 
-  // selectedItem.quantity =
-  //   selectedItem.quantity > 1 ? selectedItem.quantity - 1 : 1;
+  //handle toggle checked
+  function toggle(id) {
+    setCheckedItems((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  }
 
-  // console.log(selectedItem.quantity);
-  // setItems();
+  /// Handle Process
+  function handleSubmit() {
+    const selectedItems = items.filter((item) => checkedItems[item.id]);
+    if (selectedItems.length === 0) {
+      alert("Please, selected atleast one fruit item to checkout");
+    } else {
+      const cartItems = {
+        items: selectedItems,
+        deliveryMode,
+        selectedCity,
+      };
+      updateSelectedItems(cartItems);
+      navigate(`/checkout`);
+    }
+  }
 
-  //handle quantity Increase
-  // function handleQuantityChange(id) {
-  // const selectedItem = cart.filter((item) => item.id === id);
-  // const curValue = selectedItem[0].quantity;
-  // curValue > 1 ? curValue - 1 : 1;
-  // console.log(curValue);
-  //   const updatedCart = cart.map((item) => {
-  //     if (item.id === id) {
-  //       return {
-  //         ...item,
-  //         quantity: item.quantity > 1 ? item.quantity - 1 : 1,
-  //       };
-  //     }
-  //     console.log(item);
-  //     return item;
-  //   });
-  //   updateCart(updatedCart);
-  // }
-
-  const deliveryFee = deliveryMode === "home" ? 1000 : 0;
-
-  const subTotal = cart.reduce(
-    (total, item) => total + item.fruits.price * item.quantity,
-    0
-  );
-
-  const totalPrice = subTotal + deliveryFee;
+  const selectedItems = items.filter((item) => checkedItems[item.id]);
 
   return (
     <section className="pt-[4.8rem] pb-[3.2rem]">
@@ -200,7 +196,6 @@ function Cart() {
                     +
                   </button> */}
                   <p className="text-lg font-semibold lg:text-3xl">
-                    {" "}
                     {formatCurrency(item.fruits.price)}
                   </p>
                 </div>
@@ -223,7 +218,18 @@ function Cart() {
                     +
                   </button>
                 </div>
-                <div>
+                <div className="flex flex-row gap-4 justify-center">
+                  {/* <input type="radio" /> */}
+                  {/* <div className="inline-flex items-center justify-center"> */}
+                  <div
+                    onClick={() => toggle(item.id)}
+                    className="w-10 h-10 border-[2px solid #333] flex items-center justify-center bg-slate-400"
+                  >
+                    {checkedItems[item.id] && (
+                      <HiCheck size={24} fill="#dc2626 " />
+                    )}
+                  </div>
+                  {/* </div> */}
                   <button
                     onClick={() => handleRemove(item.id)}
                     className="text-red-600 ml-4 text-2xl lg:text-3xl flex flex-row gap-3"
@@ -236,7 +242,7 @@ function Cart() {
           </div>
         </div>
 
-        {/* Delivery Mode */}
+        {/* Delivery Mode  Section*/}
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
             <h2 className="text-xl md:text-2xl font-bold mb-4">
@@ -256,7 +262,7 @@ function Cart() {
                 Store pickup (in 20 min) - Free
               </label>
             </div>
-            <div className="flex items-center mb-4 md:text-2xl">
+            <div className=" mb-4 md:text-2xl">
               <input
                 type="radio"
                 id="home-delivery"
@@ -276,21 +282,25 @@ function Cart() {
               </h2>
               <div className="mb-4">
                 <label className="block mb-2 text-2xl">Select state:</label>
-                <select className="w-full p-2 border rounded-lg md:text-2xl">
+                <select
+                  value={selectedCity}
+                  onChange={handleSelectedCity}
+                  className="w-full p-2 border rounded-lg md:text-2xl"
+                >
                   <option value="lagos">Lagos</option>
                   <option value="abuja">Abuja</option>
                   <option value="port harcourt">Port Harcourt</option>
                   {/* Add more options as needed */}
                 </select>
               </div>
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="block mb-2 text-2xl">Enter Address:</label>
                 <input
                   type="text"
                   className="w-full p-2 border rounded-lg md:text-2xl"
                   placeholder="Enter address"
                 />
-              </div>
+              </div> */}
             </div>
           </div>
           {/* Cart Summary */}
@@ -298,7 +308,8 @@ function Cart() {
             <h2 className="text-xl font-bold mb-4 md:text-2xl">Cart Summary</h2>
             <ul>
               {/* {cart.map((item) => ( */}
-              {items.map((item) => (
+              {/* {items.map((item) => ( */}
+              {selectedItems.map((item) => (
                 <li
                   key={item.id}
                   className="flex justify-between mb-2 md:text-xl"
@@ -327,7 +338,7 @@ function Cart() {
               </p>
             </div>
             <button
-              onClick={() => navigate(`/checkout`)}
+              onClick={handleSubmit}
               className="w-full  py-2 bg-orange-500 text-white font-semibold rounded-lg md:text-2xl mt-auto"
             >
               Proceed to Checkout

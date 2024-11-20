@@ -71,3 +71,24 @@ export async function deleteCartItem(id) {
   }
   return data;
 }
+
+//signup Users
+
+export async function createUsers(user) {
+  const { data, error } = await supabase
+    .from("users")
+    .insert({
+      auth0Id: user.auth0Id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      created_at: new Date().toISOString(),
+    })
+    .select();
+  if (error) {
+    console.error(error);
+    throw new Error("Can't insert new user in table");
+  }
+
+  return data;
+}
